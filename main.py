@@ -11,9 +11,12 @@ import random                                        # импортируем м
 bot = Bot(token=TOKEN)                               #  Bot отвечает за взаимодействие с Telegram bot API
 dp = Dispatcher()                                    #  Dispatcher управляет обработкой входящих сообщений и команд.
 
-@dp.message(Command("photo"))                         # Обработка команды /help
-async def photo(message: Message):
-    list = ['https://avatars.mds.yandex.net/i?id=9b513a670ee76376548f34a5c5660345589baf4d-9870356-images-thumbs&n=13', 'https://avatars.mds.yandex.net/i?id=9c06b52cd440474f4866a3a5cc69d03bf0201fd6-7663084-images-thumbs&n=13', 'https://avatars.mds.yandex.net/i?id=75c8f5559d1e51bddc7fac372513731b-5250945-images-thumbs&n=13'] # Список ответов
+@dp.message(Command("photo"))                        # Обработка команды /help
+async def photo(message: Message):                   # Список ответов
+    list = ['https://avatars.mds.yandex.net/i?id=9b513a670ee76376548f34a5c5660345589baf4d-9870356-images-thumbs&n=13',
+            'https://avatars.mds.yandex.net/i?id=9c06b52cd440474f4866a3a5cc69d03bf0201fd6-7663084-images-thumbs&n=13',
+            'https://avatars.mds.yandex.net/i?id=75c8f5559d1e51bddc7fac372513731b-5250945-images-thumbs&n=13'
+    ]
     rand_photo = random.choice(list)
     await message.answer_photo(photo=rand_photo, caption="Это рандомная фотка")
 
@@ -42,6 +45,10 @@ async def help(message: Message):
 async def start(message: Message):
     await message.answer("Приветики, я бот!")
 
+# Пустой декоратор для обработки любых сообщений:
+@dp.message()
+async def start(message: Message):
+    await message.answer("Не беспокой меня по пустякам!")
 
 # Создадим асинхронную функцию main, которая будет запускать наш бот:
 async def main():                                    # Это асинхронная функция main
