@@ -3,9 +3,13 @@ from aiogram import Bot, Dispatcher, F
 # Для обработки команд импортируем нужные фильтры и типы сообщений:
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, FSInputFile
+import random
 
-from config import TOKEN                             # импортируем токен в основной файл
-import random                                        # импортируем модуль random
+from gtts import gTTS
+import os
+
+
+from config import TOKEN                             # импортируем токен в основной файл                                       # импортируем модуль random
 
 # Создадим объекты классов Bot и Dispatcher:
 bot = Bot(token=TOKEN)                               #  Bot отвечает за взаимодействие с Telegram bot API
@@ -21,6 +25,22 @@ async def video(message: Message):
 async def audio(message: Message):
     audio = FSInputFile('sound1.mp3')
     await bot.send_audio(message.chat.id, audio)
+
+@dp.message(Command('training'))
+async def training(message: Message):                # Обработка команды /training тренировка
+   training_list = [
+       "Тренировка 1:\n1. Скручивания: 3 подхода по 15 повторений\n2. Велосипед: 3 подхода по 20 повторений (каждая сторона)\n3. Планка: 3 подхода по 30 секунд",
+       "Тренировка 2:\n1. Подъемы ног: 3 подхода по 15 повторений\n2. Русский твист: 3 подхода по 20 повторений (каждая сторона)\n3. Планка с поднятой ногой: 3 подхода по 20 секунд (каждая нога)",
+       "Тренировка 3:\n1. Скручивания с поднятыми ногами: 3 подхода по 15 повторений\n2. Горизонтальные ножницы: 3 подхода по 20 повторений\n3. Боковая планка: 3 подхода по 20 секунд (каждая сторона)"
+   ]
+   rand_tr = random.choice(training_list)                                    # Ввыодим случайную тренировку
+   await message.answer(f"Это ваша мини-тренировка на сегодня\n {rand_tr}")    # Ответ бота на команду /training
+
+   tts = gTTS(text=rand_tr, lang='ru')                                       # Преобразуем текст в аудио
+   tts.save('training.mp3')                                                  # Сохраняем аудио
+   audio = FSInputFile('training.mp3')                                       # сохраняем аудио в переменную audio
+   await bot.send_audio(message.chat.id, audio)                              # Отправляем аудио
+   os.remove('training.mp3')                                                 # Удаляем аудио
 
 
 @dp.message(Command("photo"))                        # Обработка команды /help
