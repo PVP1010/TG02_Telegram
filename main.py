@@ -15,19 +15,35 @@ from config import TOKEN                             # импортируем т
 bot = Bot(token=TOKEN)                               #  Bot отвечает за взаимодействие с Telegram bot API
 dp = Dispatcher()                                    #  Dispatcher управляет обработкой входящих сообщений и команд.
 
-@dp.message(Command('video'))                        # Обработка команды /video
+
+@dp.message(Command('voice'))                                  # функция голос команды /voice
+async def voice(message: Message):
+    voice = FSInputFile("sample.ogg")                          # Сохраняем голосовой файл в переменную voice
+    await message.answer_voice(voice)                          # Отправляем голос в ответ на команду /voice
+
+@dp.message(Command('doc'))                                   # функция документ команды /doc
+async def doc(message: Message):
+    doc = FSInputFile("TG02.txt")
+    await bot.send_document(message.chat.id, doc)
+
+
+
+
+@dp.message(Command('video'))                        # функция видео команды /video
 async def video(message: Message):
     await bot.send_chat_action(message.chat.id, 'upload_video')   # Загрузка видео
     video = FSInputFile('video.mp4')                                    # Отправляем видео
     await bot.send_video(message.chat.id, video)
 
-@dp.message(Command('audio'))                        # Обработка команды /audio
+
+@dp.message(Command('audio'))                        # функция аудио команды /audio
 async def audio(message: Message):
     audio = FSInputFile('sound1.mp3')
     await bot.send_audio(message.chat.id, audio)
 
+
 @dp.message(Command('training'))
-async def training(message: Message):                # Обработка команды /training тренировка
+async def training(message: Message):                # функция тренировка команда /training
    training_list = [
        "Тренировка 1:\n1. Скручивания: 3 подхода по 15 повторений\n2. Велосипед: 3 подхода по 20 повторений (каждая сторона)\n3. Планка: 3 подхода по 30 секунд",
        "Тренировка 2:\n1. Подъемы ног: 3 подхода по 15 повторений\n2. Русский твист: 3 подхода по 20 повторений (каждая сторона)\n3. Планка с поднятой ногой: 3 подхода по 20 секунд (каждая нога)",
@@ -43,7 +59,7 @@ async def training(message: Message):                # Обработка ком
    os.remove('training.mp3')                                                 # Удаляем аудио
 
 
-@dp.message(Command("photo"))                        # Обработка команды /help
+@dp.message(Command("photo"))                        # функция фото команды /photo
 async def photo(message: Message):                   # Список ответов
     list = ['https://avatars.mds.yandex.net/i?id=9b513a670ee76376548f34a5c5660345589baf4d-9870356-images-thumbs&n=13',
             'https://avatars.mds.yandex.net/i?id=9c06b52cd440474f4866a3a5cc69d03bf0201fd6-7663084-images-thumbs&n=13',
