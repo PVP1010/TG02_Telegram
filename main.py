@@ -41,9 +41,10 @@ async def help(message: Message):
     await message.answer("Этот бот умеет выполнять команды: \n /start" "\n /help" "\n /photo")  # Ответ бота на команду /help
 
 # Создадим декоратор для обработки команды /start:
+# Вместо "я бот" напишем "привет" и укажем имя пользователя
 @dp.message(CommandStart())
 async def start(message: Message):
-    await message.answer("Приветики, я бот!")
+    await message.answer(f'Привет, {message.from_user.full_name}')
 
 # Создание эхо-бота
 @dp.message()
