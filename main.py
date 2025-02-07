@@ -2,7 +2,7 @@ import asyncio
 from aiogram import Bot, Dispatcher, F
 # Для обработки команд импортируем нужные фильтры и типы сообщений:
 from aiogram.filters import CommandStart, Command
-from aiogram.types import Message
+from aiogram.types import Message, FSInputFile
 
 from config import TOKEN                             # импортируем токен в основной файл
 import random                                        # импортируем модуль random
@@ -10,6 +10,18 @@ import random                                        # импортируем м
 # Создадим объекты классов Bot и Dispatcher:
 bot = Bot(token=TOKEN)                               #  Bot отвечает за взаимодействие с Telegram bot API
 dp = Dispatcher()                                    #  Dispatcher управляет обработкой входящих сообщений и команд.
+
+@dp.message(Command('video'))                        # Обработка команды /video
+async def video(message: Message):
+    await bot.send_chat_action(message.chat.id, 'upload_video')   # Загрузка видео
+    video = FSInputFile('video.mp4')                                    # Отправляем видео
+    await bot.send_video(message.chat.id, video)
+
+@dp.message(Command('audio'))                        # Обработка команды /audio
+async def audio(message: Message):
+    audio = FSInputFile('sound1.mp3')
+    await bot.send_audio(message.chat.id, audio)
+
 
 @dp.message(Command("photo"))                        # Обработка команды /help
 async def photo(message: Message):                   # Список ответов
