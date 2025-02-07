@@ -26,7 +26,7 @@ async def react_photo(message: Message):
     list = ['Ого, какая фотка!', 'Непонятно, что это такое', 'Не отправляй мне такое больше'] # Список ответов
     rand_answer = random.choice(list)                # Выбор случайного ответа
     await message.answer(rand_answer)                # Ответ бота
-
+    await bot.download(message.photo[-1], destination=f'tmp/{message.photo[-1].file_id}.jpg') # Скачиваем фото
 
 
 @dp.message(F.text == "Что такое ИИ?")               # Обработка команды "Что такое ИИ?"
@@ -46,10 +46,6 @@ async def help(message: Message):
 async def start(message: Message):
     await message.answer(f'Привет, {message.from_user.full_name}')
 
-# Создание эхо-бота
-@dp.message()
-async def start(message: Message):
-    await message.send_copy(chat_id=message.chat.id)
 
 # Создадим асинхронную функцию main, которая будет запускать наш бот:
 async def main():                                    # Это асинхронная функция main
